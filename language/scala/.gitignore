@@ -1,0 +1,10 @@
+# Algorithmia gitignore
+
+target
+
+/target
+/project/target
+
+algorithm.zip
+/.idea/
+/lib_managed/
