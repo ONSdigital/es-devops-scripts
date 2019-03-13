@@ -1,6 +1,5 @@
 package algorithmia.helloworld
 
-
 import algorithmia.helloworld.HelloWorldAlgorithmFeatureSpec.config
 import uk.gov.ons.es.it.AlgorithmFeatureSpec
 import uk.gov.ons.es.it.AlgorithmiaSupport.{AlgorithmiaConfig, withAlgorithmiaClient}
@@ -8,7 +7,7 @@ import uk.gov.ons.es.it.AlgorithmiaSupport.{AlgorithmiaConfig, withAlgorithmiaCl
 class HelloWorldAlgorithmFeatureSpec extends AlgorithmFeatureSpec {
   feature("Hello World algorithm") {
     scenario("the input to the algorithm is a name") {
-      withAlgorithmiaClient(config.apiKey) { client =>
+      withAlgorithmiaClient(config.clientConfig) { client =>
         When("the algorithm is supplied a name")
         val response = client.algo(config.algorithmDescriptor).pipe("Bob")
 
