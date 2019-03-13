@@ -7,6 +7,7 @@ env:
     - OWNER=alg-owner
     - ALGORITHM_NAME=concise-alg-name
     - ALGORITHMIA_USER=travis
+    - ES_ALGORITHMIA_API_ADDRESS=algo-url
     - ES_ALGORITHM_DESCRIPTOR=$OWNER/$ALGORITHM_NAME/$TRAVIS_COMMIT
 deploy:
   - provider: script
@@ -21,3 +22,5 @@ deploy:
     on:
       branch: master
       tags: true
+after_deploy:
+  - echo "Testing deployed endpoint $ES_ALGORITHM_DESCRIPTOR"

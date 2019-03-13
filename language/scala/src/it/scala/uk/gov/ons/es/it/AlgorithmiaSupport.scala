@@ -17,7 +17,6 @@ object AlgorithmiaSupport {
   object AlgorithmiaConfig {
     def load(): AlgorithmiaConfig = {
       val rootConfig = ConfigFactory.load()
-      println(s"Root Config is [$rootConfig]")
       val config = rootConfig.getConfig("algorithmia")
       AlgorithmiaConfig(
         clientConfig = loadClientConfigFrom(config),

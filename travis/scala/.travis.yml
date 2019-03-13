@@ -1,12 +1,13 @@
 sudo: false
 language: scala
 scala:
-  - 2.11.11
+  - 2.11.8
 env:
   global:
     - OWNER=alg-owner
     - ALGORITHM_NAME=concise-alg-name
     - ALGORITHMIA_USER=travis
+    - ES_ALGORITHMIA_API_ADDRESS=algo-url
     - ES_ALGORITHM_DESCRIPTOR=$OWNER/$ALGORITHM_NAME/$TRAVIS_COMMIT
 script:
   - sbt ++$TRAVIS_SCALA_VERSION test
@@ -26,4 +27,5 @@ deploy:
       branch: master
       tags: true
 after_deploy:
+  - echo "Testing deployed endpoint $ES_ALGORITHM_DESCRIPTOR"
   - sbt ++$TRAVIS_SCALA_VERSION it:test

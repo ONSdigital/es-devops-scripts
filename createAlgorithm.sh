@@ -9,23 +9,24 @@ owner="ons"
 network="isolated"
 algoRepo="git.algpoc.com/git" #ons
 #algoRepo="git.algorithmia.com/git" #public
+algoUrl="https://api.algpoc.com" #ons
+#algoUrl="https://api.algorithmia.com" #public
 
-while getopts "a:u:p:k:g:l:n:r:" option; do
+while getopts "a:k:g:l:n:r:u:" option; do
     case "${option}" in
     a) algorithm=${OPTARG};;
-    u) username=${OPTARG};;
-    p) password=${OPTARG};;
     k) authKey=${OPTARG};;
     g) gitHubRepo=${OPTARG};;
     l) language=${OPTARG};;
     n) network=${OPTARG};;
     r) algoRepo=${OPTARG};;
-    *) echo "script usage: $(basename "$0") [-a algorithm name] [-u username] [-p password] [-k auth key] [-g GitHub repository] [-l language (java, python3-1, scala)] [-n network access (isolated, full)] [-r algoRepo]" >&2
+    u) algoUrl=${OPTARG};;
+    *) echo "script usage: $(basename "$0") [-a algorithm name] [-k auth key] [-g GitHub repository] [-l language (java, python3-1, scala)] [-n network access (isolated, full)] [-r algoRepo]" >&2
        exit 1;;
     esac
 done
 
-source "${BASH_SOURCE%/*}"/algorithmia/create.sh -a "${algorithm}" -u "${username}" -p "${password}" -l "${language}" -n "${network}"
+source "${BASH_SOURCE%/*}"/algorithmia/create.sh -a "${algorithm}" -k "${authKey}" -l "${language}" -n "${network}"
 
 conciseAlgorithmName=${algorithm//[^[:alnum:]]/}
 
@@ -79,10 +80,10 @@ cp -v "${BASH_SOURCE%/*}"/algorithmia/*.sh "${gitHubRepo}"/scripts
 
 echo
 echo "Copying .travis.yml for '${language}' to feature/devops branch"
-#cp -v "${BASH_SOURCE%/*}"/travis/"${language}"/.travis.yml "${gitHubRepo}"
-src_yml=$(<"${BASH_SOURCE%/*}"/travis/${language}/.travis.yml)
-yml="${src_pom/alg-owner/${owner}}"
-echo "${pom//concise-alg-name/${conciseAlgorithmName}}" > "${gitHubRepo}"/pom.xml
+yml=$(<"${BASH_SOURCE%/*}"/travis/${language}/.travis.yml)
+yml="${yml/algo-url/${algoUrl}}"
+yml="${yml/alg-owner/${owner}}"
+echo "${yml//concise-alg-name/${conciseAlgorithmName}}" > "${gitHubRepo}"/.travis.yml
 
 echo
 echo "Creating Jenkinsfile for '${language}' and copying to feature/devops branch"
