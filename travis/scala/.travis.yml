@@ -1,7 +1,14 @@
 sudo: false
 language: scala
 scala:
-  - 2.11.11
+  - 2.11.8
+env:
+  global:
+    - OWNER=alg-owner
+    - ALGORITHM_NAME=concise-alg-name
+    - ALGORITHMIA_USER=travis
+    - ES_ALGORITHMIA_API_ADDRESS=algo-url
+    - ES_ALGORITHM_DESCRIPTOR=$OWNER/$ALGORITHM_NAME/$TRAVIS_COMMIT
 script:
   - sbt ++$TRAVIS_SCALA_VERSION test
 jdk:
@@ -9,13 +16,16 @@ jdk:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: bash scripts/deploy.sh -a $algo_name -u $algo_user -p $algo_password
+    script: bash scripts/deploy.sh -a $ALGORITHM_NAME -u $ALGORITHMIA_USER -p $ALGORITHMIA_PASSWORD
     on:
       branch: master
       tags: false
   - provider: script
     skip_cleanup: true
-    script: bash scripts/publish.sh -a $algo_name -k $algo_key -t $TRAVIS_TAG -g $TRAVIS_REPO_SLUG
+    script: bash scripts/publish.sh -a $ALGORITHM_NAME -k $ES_ALGORITHMIA_API_KEY -t $TRAVIS_TAG -g $TRAVIS_REPO_SLUG
     on:
       branch: master
       tags: true
+after_deploy:
+  - echo "Testing deployed endpoint $ES_ALGORITHM_DESCRIPTOR"
+  - sbt ++$TRAVIS_SCALA_VERSION it:test
