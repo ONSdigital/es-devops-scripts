@@ -2,24 +2,33 @@ package uk.gov.ons.es.it
 
 
 import com.algorithmia.{Algorithmia, AlgorithmiaClient}
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 
 object AlgorithmiaSupport {
-  def withAlgorithmiaClient[A](simpleApiKey: String)(f: AlgorithmiaClient => A): A = {
-    val client = Algorithmia.client(simpleApiKey)
+  final case class AlgorithmiaClientConfig(apiKey: String, apiAddress: String)
+  final case class AlgorithmiaConfig(clientConfig: AlgorithmiaClientConfig, algorithmDescriptor: String)
+
+  def withAlgorithmiaClient[A](clientConfig: AlgorithmiaClientConfig)(f: AlgorithmiaClient => A): A = {
+    val client = Algorithmia.client(clientConfig.apiKey, clientConfig.apiAddress)
     try f(client)
     finally client.close()
   }
 
-  final case class AlgorithmiaConfig(apiKey: String, algorithmDescriptor: String)
-
   object AlgorithmiaConfig {
     def load(): AlgorithmiaConfig = {
-      val config = ConfigFactory.load().getConfig("algorithmia")
+      val rootConfig = ConfigFactory.load()
+      println(s"Root Config is [$rootConfig]")
+      val config = rootConfig.getConfig("algorithmia")
       AlgorithmiaConfig(
-        apiKey = config.getString("simpleApiKey"),
+        clientConfig = loadClientConfigFrom(config),
         algorithmDescriptor = config.getString("algorithm.descriptor")
       )
     }
+
+    private def loadClientConfigFrom(config: Config): AlgorithmiaClientConfig =
+      AlgorithmiaClientConfig(
+        apiKey = config.getString("simpleApiKey"),
+        apiAddress = config.getString("apiAddress")
+      )
   }
 }
