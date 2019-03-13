@@ -61,6 +61,9 @@ case ${language} in
           pom="${src_pom/algorithm-name/${algorithm}}"
           echo "${pom//concise-alg-name/${conciseAlgorithmName}}" > "${gitHubRepo}"/pom.xml
           ;;
+     python3-1)
+          language="python"
+          ;;
      scala)
           cp -vr "${BASH_SOURCE%/*}"/language/"${language}/" "${gitHubRepo}"
           ;;
