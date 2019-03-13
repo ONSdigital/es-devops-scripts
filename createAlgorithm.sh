@@ -63,10 +63,12 @@ case ${language} in
           ;;
      scala)
           cp -vr "${BASH_SOURCE%/*}"/language/"${language}/" "${gitHubRepo}"
+          build_sbt=$(<"${BASH_SOURCE%/*}"/language/scala/build.sbt)
+          echo "${build_sbt//concise-alg-name/${conciseAlgorithmName}}" > "${gitHubRepo}"/build.sbt
           ;;
      *)
           echo "${language} is not supported"
-          exit 1
+
           ;;
 esac
 
@@ -77,7 +79,10 @@ cp -v "${BASH_SOURCE%/*}"/algorithmia/*.sh "${gitHubRepo}"/scripts
 
 echo
 echo "Copying .travis.yml for '${language}' to feature/devops branch"
-cp -v "${BASH_SOURCE%/*}"/travis/"${language}"/.travis.yml "${gitHubRepo}"
+#cp -v "${BASH_SOURCE%/*}"/travis/"${language}"/.travis.yml "${gitHubRepo}"
+src_yml=$(<"${BASH_SOURCE%/*}"/travis/${language}/.travis.yml)
+yml="${src_pom/alg-owner/${owner}}"
+echo "${pom//concise-alg-name/${conciseAlgorithmName}}" > "${gitHubRepo}"/pom.xml
 
 echo
 echo "Creating Jenkinsfile for '${language}' and copying to feature/devops branch"

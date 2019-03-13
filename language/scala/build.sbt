@@ -2,9 +2,9 @@
 // Algorithmia algorithm build file
 //
 
-name := "helloworld"
+name := "concise-alg-name"
 
-organization := "algorithmia"
+organization := "ons"
 
 // Allow version to be overwritten with "-DalgoVersion=XXX"
 version := System.getProperty("algo.version", "1.0-SNAPSHOT")
