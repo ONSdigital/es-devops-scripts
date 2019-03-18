@@ -12,6 +12,7 @@ url="https://api.algpoc.com/v1/algorithms" #ons
 while getopts "a:k:l:n:o:u:" option; do
     case "${option}" in
     a) algorithm=${OPTARG};;
+    c) conciseAlgorithmName=${OPTARG};;
     k) authKey=${OPTARG};;
     l) language=${OPTARG};;
     n) network=${OPTARG};;
@@ -22,7 +23,7 @@ while getopts "a:k:l:n:o:u:" option; do
     esac
 done
 
-conciseAlgorithmName=${algorithm//[^[:alnum:]]/}
+#conciseAlgorithmName=${algorithm//[^[:alnum:]]/}
 
 echo "Creating algorithm '${algorithm}' with name '${conciseAlgorithmName}'..."
 echo

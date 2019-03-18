@@ -3,7 +3,7 @@
 # exit when any command fails
 set -e
 
-versionType="revision"
+versionType="minor"
 owner="ons"
 github_tag="n/a"
 url="https://api.algpoc.com/v1/algorithms" #ons

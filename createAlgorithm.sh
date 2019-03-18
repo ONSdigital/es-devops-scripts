@@ -26,9 +26,10 @@ while getopts "a:k:g:l:n:r:u:" option; do
     esac
 done
 
-source "${BASH_SOURCE%/*}"/algorithmia/create.sh -a "${algorithm}" -k "${authKey}" -l "${language}" -n "${network}"
-
 conciseAlgorithmName=${algorithm//[^[:alnum:]]/}
+conciseAlgorithmName=$(tr "[:lower:]" "[:upper:]" <<< "${conciseAlgorithmName:0:1}")${conciseAlgorithmName:1}
+
+source "${BASH_SOURCE%/*}"/algorithmia/create.sh -a "${algorithm}" -c ${conciseAlgorithmName} -l "${language}" -n "${network}"
 
 echo
 echo "Cloning algorithm '${algorithm}' with name '${conciseAlgorithmName}' from ${algoRepo}"
@@ -58,9 +59,16 @@ echo
 echo "Copying '${language}' language source files to feature/devops branch"
 case ${language} in
      java)
+          cp -vr "${BASH_SOURCE%/*}"/language/"${language}/" "${gitHubRepo}"
           src_pom=$(<"${BASH_SOURCE%/*}"/language/java/pom.xml)
           pom="${src_pom/algorithm-name/${algorithm}}"
           echo "${pom//concise-alg-name/${conciseAlgorithmName}}" > "${gitHubRepo}"/pom.xml
+          rm -rf "${gitHubRepo}"/src/test/java/algorithmia/helloworld
+          unitTest=$(<"${BASH_SOURCE%/*}"/language/java/src/test/java/algorithmia/helloworld/HelloWorldTest.java)
+          unitTest="${unitTest//HelloWorld/${conciseAlgorithmName}}"
+          echo "${unitTest//helloworld/${conciseAlgorithmName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${conciseAlgorithmName}"/"${conciseAlgorithmName}Test".java
+          sysTest=$(<"${BASH_SOURCE%/*}"/language/java/src/test/java/algorithmia/helloworld/HelloWorldSystemIT.java)
+          echo "${sysTest//HelloWorld/${conciseAlgorithmName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${conciseAlgorithmName}"/"${conciseAlgorithmName}SystemIT".java
           ;;
      python3-1)
           language="python"
@@ -72,12 +80,11 @@ case ${language} in
           ;;
      *)
           echo "${language} is not supported"
-
           ;;
 esac
 
 echo
-echo "Copying Algorithmis algorithm management scripts to feature/devops branch"
+echo "Copying Algorithmia algorithm management scripts to feature/devops branch"
 mkdir "${gitHubRepo}"/scripts
 cp -v "${BASH_SOURCE%/*}"/algorithmia/*.sh "${gitHubRepo}"/scripts
 
@@ -101,4 +108,7 @@ cd "${gitHubRepo}"
 git add -A
 git commit -a -m "DevOps configuration"
 git push github feature/devops
+
+
+
 
