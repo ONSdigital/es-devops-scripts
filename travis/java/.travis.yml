@@ -23,4 +23,5 @@ deploy:
       branch: master
       tags: true
 after_deploy:
-  - echo "Testing deployed endpoint $ES_ALGORITHM_DESCRIPTOR"
+  - echo "Testing deployed endpoint"
+  - mvn verify
