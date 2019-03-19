@@ -28,6 +28,10 @@ done
 
 conciseAlgorithmName=${algorithm//[^[:alnum:]]/}
 conciseAlgorithmName=$(tr "[:lower:]" "[:upper:]" <<< "${conciseAlgorithmName:0:1}")${conciseAlgorithmName:1}
+packageName=$(tr "[:upper:]" "[:lower:]" <<< "${conciseAlgorithmName}")
+echo "Concise algorithm name is ${conciseAlgorithmName}"
+echo "Lowercase concise algorithm name is ${packageName}"
+echo
 
 source "${BASH_SOURCE%/*}"/algorithmia/create.sh -a "${algorithm}" -c ${conciseAlgorithmName} -l "${language}" -n "${network}"
 
@@ -43,11 +47,11 @@ git remote add github https://github.com/"${onsGitHubOrg}"/"${gitHubRepo}"
 
 echo
 echo "Pushing changes to GitHub master branch"
-git push github master
+#git push github master
 
 echo
 echo "Checking out feature/devops branch"
-git checkout -b feature/devops
+#git checkout -b feature/devops
 
 cd ..
 
@@ -59,16 +63,27 @@ echo
 echo "Copying '${language}' language source files to feature/devops branch"
 case ${language} in
      java)
+          # Copy over all language files
           cp -vr "${BASH_SOURCE%/*}"/language/"${language}/" "${gitHubRepo}"
+          # Update the pom.xml
           src_pom=$(<"${BASH_SOURCE%/*}"/language/java/pom.xml)
           pom="${src_pom/algorithm-name/${algorithm}}"
           echo "${pom//concise-alg-name/${conciseAlgorithmName}}" > "${gitHubRepo}"/pom.xml
+          # Remove helloworld dir
           rm -rf "${gitHubRepo}"/src/test/java/algorithmia/helloworld
+          # Create lowercase package directories
+          mv "${gitHubRepo}"/src/main/java/algorithmia/"${conciseAlgorithmName}" "${gitHubRepo}"/src/main/java/algorithmia/"${packageName}"
+          mv "${gitHubRepo}"/src/test/java/algorithmia/"${conciseAlgorithmName}" "${gitHubRepo}"/src/test/java/algorithmia/"${packageName}"
+           # Update package in class file
+          classFile=$(<"${gitHubRepo}"/src/main/java/algorithmia/"${packageName}"/"${conciseAlgorithmName}".java)
+          echo "${classFile//algorithmia.${conciseAlgorithmName}/algorithmia.${packageName}}" > "${gitHubRepo}"/src/main/java/algorithmia/"${packageName}"/"${conciseAlgorithmName}".java
+          # Create unit test
           unitTest=$(<"${BASH_SOURCE%/*}"/language/java/src/test/java/algorithmia/helloworld/HelloWorldTest.java)
           unitTest="${unitTest//HelloWorld/${conciseAlgorithmName}}"
-          echo "${unitTest//helloworld/${conciseAlgorithmName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${conciseAlgorithmName}"/"${conciseAlgorithmName}Test".java
+          echo "${unitTest//helloworld/${packageName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${packageName}"/"${conciseAlgorithmName}Test".java
+          # Create integration test
           sysTest=$(<"${BASH_SOURCE%/*}"/language/java/src/test/java/algorithmia/helloworld/HelloWorldSystemIT.java)
-          echo "${sysTest//HelloWorld/${conciseAlgorithmName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${conciseAlgorithmName}"/"${conciseAlgorithmName}SystemIT".java
+          echo "${sysTest//HelloWorld/${conciseAlgorithmName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${packageName}"/"${conciseAlgorithmName}SystemIT".java
           ;;
      python3-1)
           language="python"

@@ -15,7 +15,7 @@ public class HelloWorldTest {
     }
 
     @Test
-    public void testGreeting() throws Exception {
+    public void testHelloWorld() throws Exception {
         assertThat(underTest.apply("Bob"), equalTo("Hello Bob"));
     }
 }
