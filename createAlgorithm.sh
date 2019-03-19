@@ -47,12 +47,11 @@ git remote add github https://github.com/"${onsGitHubOrg}"/"${gitHubRepo}"
 
 echo
 echo "Pushing changes to GitHub master branch"
-#git push github master
+git push github master
 
 echo
 echo "Checking out feature/devops branch"
-#git checkout -b feature/devops
-
+git -c core.ignorecase=false checkout -b feature/devops
 cd ..
 
 echo "Copying ONS MIT license to feature/devops branch"
@@ -83,7 +82,8 @@ case ${language} in
           echo "${unitTest//helloworld/${packageName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${packageName}"/"${conciseAlgorithmName}Test".java
           # Create integration test
           sysTest=$(<"${BASH_SOURCE%/*}"/language/java/src/test/java/algorithmia/helloworld/HelloWorldSystemIT.java)
-          echo "${sysTest//HelloWorld/${conciseAlgorithmName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${packageName}"/"${conciseAlgorithmName}SystemIT".java
+          sysTest="${sysTest//HelloWorld/${conciseAlgorithmName}}"
+          echo "${sysTest//helloworld/${packageName}}" > "${gitHubRepo}"/src/test/java/algorithmia/"${packageName}"/"${conciseAlgorithmName}SystemIT".java
           ;;
      python3-1)
           language="python"
@@ -120,7 +120,11 @@ echo "${language_file//name/${conciseAlgorithmName}}" > "${gitHubRepo}"/Jenkinsf
 echo
 echo "Pushing changes to GitHub feature/devops branch"
 cd "${gitHubRepo}"
-git add -A
+git -c core.ignorecase=false mv -f src/main/java/algorithmia/"${conciseAlgorithmName}" src/main/java/algorithmia/temp
+git -c core.ignorecase=false mv -f src/main/java/algorithmia/temp src/main/java/algorithmia/"${packageName}"
+git -c core.ignorecase=false mv -f src/test/java/algorithmia/"${conciseAlgorithmName}" src/test/java/algorithmia/temp
+git -c core.ignorecase=false mv -f src/test/java/algorithmia/temp src/test/java/algorithmia/"${packageName}"
+git -c core.ignorecase=false add -A
 git commit -a -m "DevOps configuration"
 git push github feature/devops
 
