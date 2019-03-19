@@ -1,13 +1,12 @@
 package algorithmia.helloworld;
 
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class HelloWorldTest extends TestCase {
+public class HelloWorldTest {
 
     private final HelloWorld underTest;
 
@@ -16,7 +15,7 @@ public class HelloWorldTest extends TestCase {
     }
 
     @Test
-    public void testhwj() throws Exception {
+    public void testHelloWorld() throws Exception {
         assertThat(underTest.apply("Bob"), equalTo("Hello Bob"));
     }
 }
