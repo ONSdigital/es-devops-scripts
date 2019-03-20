@@ -1,4 +1,4 @@
-package algorithmia.helloworld;
+package algorithmia.HelloWorld;
 
 
 import com.algorithmia.Algorithmia;
