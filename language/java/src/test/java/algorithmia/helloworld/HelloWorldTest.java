@@ -1,5 +1,4 @@
-package algorithmia.helloworld;
-
+package algorithmia.HelloWorld;
 
 import org.junit.Test;
 
