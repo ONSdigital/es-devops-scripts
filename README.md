@@ -115,6 +115,22 @@ This variable contains an Algorithmia API key with API management permissions on
 
 The API key is used when running tests against the deploy algorithm.
 
+### Algorithm Deployment
+
+Once code is merge to the master branch in Github it will also be pushed to the master branch of the Algorithmia Git repository.
+
+This triggers a deployment of the algorithm.
+
+The first deployment will occur when the `feature/devops` branch is merged to master.
+
+### Algorithm Publishing
+
+To create a published version of an algorithm create a Github release. This will trigger the publishing of an algorithm in Algorithmia.
+
+Note it is not possible to specify the version number of an algorithm only a major, minor or revision release. Currently automated publishing will always create a minor version increment.
+
+The first version of your algorithm should be tagged `0.1.0` in GitHub. Subsequent versions should be `0.2.0`, `0.3.0` etc.
+
 ## License
 
 All content is licensed under the terms of [The MIT License](LICENSE).
