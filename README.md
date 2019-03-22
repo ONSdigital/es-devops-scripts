@@ -43,55 +43,49 @@ The following steps outline what's typically involved in creating an algorithm
 bash es-devops-scripts/createAlgorithm.sh -a 'My Algorithm' -k xxx  -l java -g my-git-repo
 ```
 
-### Parameters
+### Mandatory Parameters
 
 The following parameters can be specified when creating an algorithm.
 
 #### Algorithm (*-a*)
-**Mandatory Parameter**
 
 The English name of the algorithm (can contain spaces and special charaacters).
 
 The name is stripped of spaces and special characters when creating the Algorithmia Git repository.
 
 #### Algorithmia API Key (*-k*)
-**Mandatory Parameter**
 
 An API key in Algorithmia with API management permissions on the specified owner ('ons' by default) of the algorithm.
 
 #### Language(*-l*)
-**Mandatory Parameter**
 
 The language for your algorithm.
 
 Supported languages are 'java', 'scala' and 'python3-1' (although this uses a Python 3.6).
 
 #### GitHub Repository (*-g*)
-**Mandatory Parameter**
 
 The GitHub repository (within [ONSdigital](https://github.com/ONSdigital) ) to which your algorithm source code will be pushed.
 
+### Optional  Parameters
+
 #### GitHub Repository (*-n*)
-**Optional Parameter**
 
 Internet access for your algorithm (defaults to 'isolated').
 
 Options are 'isolated' (not internet access) or 'full'.
 
 #### GitHub Repository (*-o*)
-**Optional Parameter**
 
 The owner of the algorithm in Algorithmia (defaults to 'ons').
 
 #### Algorithmia Git Repository (*-r*)
-**Optional Parameter**
 
 Defaults to the ONS proof of concept Algorithmia Git repository.
 
 Use 'git.algorithmia.com/git' to create an algorithm in [public Algorithmia](https://algorithmia.com).
 
 #### Algorithmia Management API URL(*-u*)
-**Optional Parameter**
 
 Defaults to the ONS proof of concept Algorithmia.
 
