@@ -3,6 +3,13 @@ language: python
 python:
   - "3.5"
 # command to install dependencies
+env:
+  global:
+    - OWNER=alg-owner
+    - ALGORITHM_NAME=concise-alg-name
+    - ALGORITHMIA_USER=travis
+    - ES_ALGORITHMIA_API_ADDRESS=algo-url
+    - ES_ALGORITHM_DESCRIPTOR=$OWNER/$ALGORITHM_NAME/$TRAVIS_COMMIT
 install:
   - pip install -r requirements.txt
 # command to run tests
