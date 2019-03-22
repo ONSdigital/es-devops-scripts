@@ -49,7 +49,7 @@ The following parameters can be specified when creating an algorithm.
 
 #### Algorithm (*-a*)
 
-The English name of the algorithm (can contain spaces and special charaacters).
+The English name of the algorithm (can contain spaces and special characters).
 
 The name is stripped of spaces and special characters when creating the Algorithmia Git repository.
 
@@ -91,7 +91,24 @@ Defaults to the ONS proof of concept Algorithmia.
 
 Use 'https://api.algorithmia.com' to create an algorithm in [public Algorithmia](https://algorithmia.com).
 
+## Jenkins
+
+The script automatically creates a 'Jenkinsfile' file.
+
+The configuration is based on the ONS on-network Jenkins installation and thus the agents used are namely according.
+
+The pipeline is only functional for the build, test and analysis phases.
+
+Deployment and publishing is currently via Travis CI.
+
+### Shared Library
+
+The created Jenkinsfile depends on this [shared library](https://github.com/ONSdigital/es-algo-jenkins-lib).
+
+
 ## Configuring Travis CI
+
+The script automatically creates a '.travis.yml' file which will trigger a build in [ONSdigital Travis CI](https://travis-ci.com/ONSdigital).
 
 Once your algorithm has been created you will need to add a couple of environment variables to the job in Travis.
 
