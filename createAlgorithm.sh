@@ -19,6 +19,7 @@ while getopts "a:k:g:l:n:r:u:" option; do
     g) gitHubRepo=${OPTARG};;
     l) language=${OPTARG};;
     n) network=${OPTARG};;
+    o) owner=${OPTARG};;
     r) algoRepo=${OPTARG};;
     u) algoUrl=${OPTARG};;
     *) echo "script usage: $(basename "$0") [-a algorithm name] [-k auth key] [-g GitHub repository] [-l language (java, python3-1, scala)] [-n network access (isolated, full)] [-r algoRepo]" >&2
