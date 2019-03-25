@@ -80,6 +80,9 @@ case ${language} in
           ;;
      python3-1)
           language="python"
+          sonar=$(<"${BASH_SOURCE%/*}"/language/python/sonar-project.properties)
+          sonar="${sonar//github-repo/${gitHubRepo}}"
+          echo "${sonar//algorithm-name/${algorithm}}" > "${gitHubRepo}"/sonar-project.properties
           ;;
      scala)
           cp -vr "${BASH_SOURCE%/*}"/language/"${language}/" "${gitHubRepo}"
